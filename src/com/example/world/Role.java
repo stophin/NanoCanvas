@@ -2,7 +2,6 @@ package com.example.world;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 
 public class Role {
 	private Rect geometry;
