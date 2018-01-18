@@ -24,17 +24,19 @@ public final class R {
     public static final class drawable {
         public static final int block=0x7f020000;
         public static final int cursor=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int m001=0x7f020003;
-        public static final int m002=0x7f020004;
-        public static final int m003=0x7f020005;
-        public static final int m004=0x7f020006;
-        public static final int m006=0x7f020007;
-        public static final int player1=0x7f020008;
-        public static final int player2=0x7f020009;
-        public static final int player3=0x7f02000a;
-        public static final int tree1=0x7f02000b;
-        public static final int tree2=0x7f02000c;
+        public static final int dead=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int m001=0x7f020004;
+        public static final int m002=0x7f020005;
+        public static final int m003=0x7f020006;
+        public static final int m004=0x7f020007;
+        public static final int m006=0x7f020008;
+        public static final int player1=0x7f020009;
+        public static final int player2=0x7f02000a;
+        public static final int player3=0x7f02000b;
+        public static final int tree1=0x7f02000c;
+        public static final int tree2=0x7f02000d;
+        public static final int tree3=0x7f02000e;
     }
     public static final class id {
         public static final int action_settings=0x7f090000;
@@ -50,6 +52,11 @@ public final class R {
         public static final int map=0x7f040001;
         public static final int player=0x7f040002;
         public static final int resources=0x7f040003;
+        public static final int scene=0x7f040004;
+        public static final int tree1=0x7f040005;
+        public static final int tree2=0x7f040006;
+        public static final int tree3=0x7f040007;
+        public static final int tree4=0x7f040008;
     }
     public static final class string {
         public static final int action_settings=0x7f060002;

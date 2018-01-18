@@ -28,7 +28,7 @@ public abstract class ViewBase extends View implements Runnable {
 	}
 	
 	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+		return;
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {

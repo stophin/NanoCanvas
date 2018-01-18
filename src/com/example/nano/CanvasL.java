@@ -16,13 +16,16 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.Rect;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 public class CanvasL extends ViewBase {
 	
 	private float width;
 	private float height;
-	private Role role;
+	private Roles role;
 	private Roles cursor;
+	private Roles player;
 	private World world;
 	private ResourceManager resm;
 	
@@ -33,7 +36,6 @@ public class CanvasL extends ViewBase {
 		
 		width = getWidth();
 		height = getHeight();
-		role = new Role();
 		//Initialize
 		world = new World(10);
 		resm = new ResourceManager(this);
@@ -57,25 +59,114 @@ public class CanvasL extends ViewBase {
 		Loading.loadMap(resm, world);
 		
 
-		cursor = Loading.loadRole(resm, 0.5f);
-		cursor.moveRole(200,  100);
-		world.addRole(cursor, Role_Type.Player);
+		player = Loading.loadRole(resm, 0.5f);
+		player.moveRole(200,  100);
+		world.addRole(player, Role_Type.Player);
+//		
+//		cursor = Loading.loadRole(resm, 1, "cursor");
+//		cursor.moveRole(100,  100);
+//		world.addRole(cursor, Role_Type.Cursor);
+//
+//		role = Loading.loadRole(resm, 1, "tree1");
+//		role.moveRole(200,  200);
+//		world.addRole(role, Role_Type.Normal);
+//		role = Loading.loadRole(resm, 1, "tree2");
+//		role.moveRole(300,  200);
+//		world.addRole(role, Role_Type.Normal);
+//		role = Loading.loadRole(resm, 1, "tree3");
+//		role.moveRole(400,  200);
+//		world.addRole(role, Role_Type.Normal);
 		
-		cursor = Loading.loadRole(resm, 1, "cursor");
-		cursor.moveRole(100,  100);
-		world.addRole(cursor, Role_Type.Cursor);
+		Loading.loadScene(resm, world);
+		
 	}
 	private Canvas canvas = null;
+	private int isRefresh = 1;
 	@Override
 	public void onDraw(Canvas canvas) {
+		if (0 >= isRefresh) {
+			//return;
+		}
+		isRefresh--;
+		
 		super.onDraw(canvas);
+		
 		this.canvas = canvas;
 
 		//onDrawExternal(canvas);
 		world.drawRole(this);
 		
+		if (null != player) {
+			player.fetchPath();
+		}
+		
 		this.canvas = null;
 	}
+	
+	public void onAstar(float x, float y) {
+		if (null == player) {
+			return;
+		}
+		PointF pt = Projection.projectFlat(x - world.display.X,  y - world.display.Y);
+		Paths dest = new Paths((pt.X - player.flatting.X) / player.flatting.Width,
+				(pt.Y - player.flatting.Y)/ player.flatting.Height);
+		player.astarPath(dest, Constants.DEF_ASTAR_LIMIT);
+	}
+	
+	private PointF start = new PointF();
+	private int isDrag = 0;
+	public void onDrag(float x, float y, int mode) {
+		if (1 == mode) {
+			start.X = x - world.leftTop.X;
+			start.Y = y + world.leftTop.Y;
+		} else if (2 == mode) {
+			if (!Constants.DEF_ISZERO(start.X) && !Constants.DEF_ISZERO(start.Y)) {
+				world.offset(x - world.leftTop.X - start.X, y - world.leftTop.Y - start.Y);
+				isDrag = 1;
+			}
+		} else {
+			start.X = 0;
+			start.Y = 0;
+			isDrag = 0;
+		}
+		isRefresh++;
+	}
+	
+	private PointF mouse = new PointF();
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		mouse.set(event.getX(), event.getY());
+		 switch (event.getAction()) {
+		 case MotionEvent.ACTION_DOWN://0
+			 onDrag(mouse.X, mouse.Y, 1);
+		     break;
+		 case MotionEvent.ACTION_UP://1
+			 if (0 == isDrag) {
+				 onAstar(mouse.X, mouse.Y);
+			 } else {
+				 onDrag(mouse.X, mouse.Y, 0);
+			 }
+		     break;
+		 case MotionEvent.ACTION_MOVE://2
+			 onDrag(mouse.X, mouse.Y, 2);
+		     break;    
+		 }
+		return true;
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		return true;
+	}
+	
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		return false;
+	}
+	
+	public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
+		return true;
+	}
+	
+
 	
 	public int getFileIndex(String imageName, String path) {
 		 return this.context.getResources().getIdentifier(imageName, path , this.context.getPackageName()); 
@@ -88,6 +179,16 @@ public class CanvasL extends ViewBase {
 	public Bitmap getBitmap(int rId) {
 		return BitmapFactory.decodeResource(getResources(), rId);
 	}
+	
+	public static Trigger trigger = new Trigger() {
+
+		@Override
+		public int run(Object lParam, Object wParam) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
+	};
 	
 	private RectF truncation = null;
 	private RectF destination = null;
@@ -113,8 +214,9 @@ public class CanvasL extends ViewBase {
 		destination.set(destination_x, destination_y,
 						destination_x + destination_width, destination_y +  destination_height);
 		//Don't know why here must be multipied by 2
-		truncation.scale(2);
-		destination.scale(2);
+		truncation.Width *= 2;
+		truncation.Height *= 2;
+		//destination.scale(2);
 
 		if (null == trunc) {
 			trunc = new android.graphics.Rect();
@@ -137,13 +239,4 @@ public class CanvasL extends ViewBase {
 		canvas.drawRect(desti, mPaint);
 	}
 	
-	public static Trigger trigger = new Trigger() {
-
-		@Override
-		public int run(Object lParam, Object wParam) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-		
-	};
 }

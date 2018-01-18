@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import com.example.nano.CanvasL;
 import com.example.nano.R;
@@ -141,6 +142,7 @@ public class Loading {
 		     while((data = buffreader.readLine()) != null) {
 		    	 bufferString += data + "\r\n";
 		     }
+		     g_roles.put(name, bufferString);
 	    	 role = createRole(resourceManager, bufferString, scale);
         } catch(Exception e) {
         	
@@ -575,6 +577,105 @@ public class Loading {
 				temp = temp1;
 			}
 			tprole = temp.link;
+		}
+	}
+	public static void loadScene(ResourceManager resourceManager, World world) {
+		loadScene(resourceManager, world, null);
+	}
+	
+	public static void loadScene(ResourceManager resourceManager, World world, String name) {
+		if (null ==  resourceManager) {
+			return;
+		}
+		if (null == world) {
+			return;
+		}
+		if (null == name) {
+			name = "scene";
+		}
+
+        InputStream is = null;
+        try {
+        	//is=MainActivity.this.getResources().openRawResource(R.raw.cet6);
+        	int rID = resourceManager.canvas.getFileIndex(name, "raw");
+        	is = resourceManager.canvas.openFile(rID);
+        	InputStreamReader ir = new InputStreamReader(is, "UTF-8");
+	 		
+	 		 BufferedReader buffreader = new BufferedReader(ir);
+	 		 String bufferString = "";
+	 		 String data;
+		     while((data = buffreader.readLine()) != null) {
+		    	 bufferString += data + "\r\n";
+		     }
+	    	 createScene(resourceManager, world, bufferString);
+        } catch(Exception e) {
+        	
+        } finally{
+			if(is!=null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static HashMap<String, String> g_roles = new HashMap<String, String>();
+	public static void createScene(ResourceManager resm, World world, String sceneString) {
+		if (null == resm) {
+			return;
+		}
+		if (null == world) {
+			return;
+		}
+		String[] lineString = sceneString.split("\r\n");
+		String[] indexString;
+		
+		Roles role = null;
+		float scale = 1;
+		int index = 0;
+		String data = "";
+		for (int i = 0; i < lineString.length; i++)
+		{
+			indexString = lineString[i].split("\t");
+			if (indexString.length >= 3)
+			{
+				index = 0;
+				if (indexString.length >= 4)
+				{
+					index = Integer.parseInt(indexString[3]);
+				}
+				if (index < 0)
+				{
+					index = 0;
+				}
+				scale = 1;
+				if (indexString.length >= 5)
+				{
+					scale = Float.parseFloat(indexString[4]);
+				}
+				if (scale < 0 || scale > 10)
+				{
+					scale = 1;
+				}
+				data = g_roles.get(indexString[0]);
+				if (null == data || data.equals(""))
+				{
+					role = loadRole(resm, scale, indexString[0]);
+				}
+				else
+				{
+					role = createRole(resm, data, scale);
+				}
+				if (null != role)
+				{
+					role.uniqueID = index;
+					role.moveFlat(Integer.parseInt(indexString[1]), Integer.parseInt(indexString[2]));
+					world.addRole(role);
+				}
+			}
 		}
 	}
 }
