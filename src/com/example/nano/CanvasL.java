@@ -16,6 +16,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.Rect;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -177,7 +178,13 @@ public class CanvasL extends ViewBase {
 	}
 	
 	public Bitmap getBitmap(int rId) {
-		return BitmapFactory.decodeResource(getResources(), rId);
+		//Load image using it's raw geometry without stretch
+	    TypedValue value = new TypedValue();
+	    android.content.res.Resources resources = getResources();
+	    resources.openRawResource(rId, value);
+	    BitmapFactory.Options opts = new BitmapFactory.Options();
+	    opts.inTargetDensity = value.density;
+	    return BitmapFactory.decodeResource(resources, rId, opts);
 	}
 	
 	public static Trigger trigger = new Trigger() {
@@ -209,14 +216,11 @@ public class CanvasL extends ViewBase {
 		if (null == destination) {
 			destination = new RectF();
 		}
+		
 		truncation.set(truncation_x, truncation_y,
 						truncation_x + truncation_width, truncation_y +  truncation_height);
 		destination.set(destination_x, destination_y,
 						destination_x + destination_width, destination_y +  destination_height);
-		//Don't know why here must be multipied by 2
-		truncation.Width *= 2;
-		truncation.Height *= 2;
-		//destination.scale(2);
 
 		if (null == trunc) {
 			trunc = new android.graphics.Rect();

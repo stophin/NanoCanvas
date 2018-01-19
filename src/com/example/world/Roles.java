@@ -64,7 +64,7 @@ public class Roles extends MultiLinkList.Element<Roles>{
 	public PointF vRightBottom = new PointF();
 	public PointF vRightTop = new PointF();
 	
-	public int fetchSpeed = Constants.DEF_FETCH_SPEED;
+	public float fetchSpeed = Constants.DEF_FETCH_SPEED;
 	public int fetchCount = 0;
 	public int occupy = Constants.DEF_OCCUPY;
 	
