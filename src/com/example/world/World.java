@@ -286,7 +286,8 @@ public class World {
 			temp = this.players.link;
 			do
 			{
-				temp.drawAnimation(canvas);
+				//temp.drawAnimation(canvas);
+				temp.nextAnimation();
 				i++;
 				temp = this.players.next(temp);
 			}while (null != temp && temp != this.players.link);

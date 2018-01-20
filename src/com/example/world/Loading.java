@@ -652,6 +652,7 @@ public class Loading {
 					index = 0;
 				}
 				scale = 1;
+
 				if (indexString.length >= 5)
 				{
 					scale = Float.parseFloat(indexString[4]);

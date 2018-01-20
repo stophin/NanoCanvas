@@ -422,7 +422,7 @@ public class Roles extends MultiLinkList.Element<Roles>{
 //			}
 
 			
-			float olddirection = this.direction;
+			int olddirection = this.direction;
 			this.direction = this.getDirection(dx, dy);
 //			if (olddirection != this.direction)
 //			{
@@ -472,7 +472,7 @@ public class Roles extends MultiLinkList.Element<Roles>{
 		{
 			dx = Constants.DEF_ZERO;
 		}
-		int h = (int) Math.atan(-dy/dx);
+		float h =  (float) Math.atan(-dy/dx);
 
 		if (-dy > 0)
 		{

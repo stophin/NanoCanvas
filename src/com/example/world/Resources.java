@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 public class Resources extends LinkList.Element<Resources> {
 	public Bitmap image = null;
+	public Bitmap image_r = null;
 	public String src;
 	public float width;
 	public float height;
@@ -18,5 +19,7 @@ public class Resources extends LinkList.Element<Resources> {
 		String path = "drawable";
 		int rID = canvas.getFileIndex(filename, path);
 		this.image = canvas.getBitmap(rID);
+		
+		this.image_r = canvas.convert(this.image, this.image.getWidth(), this.image.getHeight());
 	}
 }

@@ -8,13 +8,12 @@ import com.example.world.Constants.*;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
-import android.graphics.Path.Direction;
 import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -119,7 +118,7 @@ public class CanvasL extends ViewBase {
 	public void onDrag(float x, float y, int mode) {
 		if (1 == mode) {
 			start.X = x - world.leftTop.X;
-			start.Y = y + world.leftTop.Y;
+			start.Y = y - world.leftTop.Y;
 		} else if (2 == mode) {
 			if (!Constants.DEF_ISZERO(start.X) && !Constants.DEF_ISZERO(start.Y)) {
 				world.offset(x - world.leftTop.X - start.X, y - world.leftTop.Y - start.Y);
@@ -176,7 +175,7 @@ public class CanvasL extends ViewBase {
 	public InputStream openFile(int rId) {
 		return this.context.getResources().openRawResource(rId);
 	}
-	
+
 	public Bitmap getBitmap(int rId) {
 		//Load image using it's raw geometry without stretch
 	    TypedValue value = new TypedValue();
@@ -185,6 +184,18 @@ public class CanvasL extends ViewBase {
 	    BitmapFactory.Options opts = new BitmapFactory.Options();
 	    opts.inTargetDensity = value.density;
 	    return BitmapFactory.decodeResource(resources, rId, opts);
+	}
+	public Bitmap convert(Bitmap a, int width, int height)
+	{
+		Bitmap newb = Bitmap.createBitmap(width, height, Config.ARGB_8888);// 创建一个新的和SRC长度宽度一样的位图
+		Canvas cv = new Canvas(newb);
+		Matrix m = new Matrix();
+		//m.postScale(1, -1);   //镜像垂直翻转
+		//m.postRotate(-90);  //旋转-90度
+		m.postScale(-1, 1);   //镜像水平翻转
+		Bitmap new2 = Bitmap.createBitmap(a, 0, 0, width, height, m, true);
+		cv.drawBitmap(new2, new Rect(0, 0, new2.getWidth(), new2.getHeight()),new Rect(0, 0, width, height), null);
+		return newb;
 	}
 	
 	public static Trigger trigger = new Trigger() {
@@ -234,6 +245,7 @@ public class CanvasL extends ViewBase {
 			desti = new android.graphics.RectF();
 		}
 		destination.give(desti);
+		
 		canvas.drawBitmap(image, trunc, desti, mPaint);
 		
 		mPaint.setStyle(Style.STROKE);

@@ -35,13 +35,6 @@ public class Objects extends LinkList.Element<Objects> {
 		this.resource = resource;
 	}
 	
-	public Objects moveObject(float directionX, float directionY) {
-		this.destination.X += directionX;
-		this.destination.Y += directionY;
-		
-		return this;
-	}
-	
 	public void drawObject(CanvasL canvas) {
 //		if (!this.resource || !this.resource.image) {
 //			return;
@@ -51,7 +44,12 @@ public class Objects extends LinkList.Element<Objects> {
 //		}
 		try {
 			if (1 == this.reverse){
-				//TODO
+				canvas.drawBitmap(this.resource.image_r,
+						(float)this.resource.image_r.getWidth() - this.truncation.X, this.truncation.Y,
+						this.truncation.Width, this.truncation.Height,
+						this.destination.X + this.world.display.X,
+						this.destination.Y + this.world.display.Y,
+						this.destination.Width, this.destination.Height);
 			} else {
 				canvas.drawBitmap(this.resource.image,
 						this.truncation.X, this.truncation.Y,
@@ -63,6 +61,14 @@ public class Objects extends LinkList.Element<Objects> {
 		} catch(Exception e) {
 			//TODO
 		}
+	}
+
+	
+	public Objects moveObject(float directionX, float directionY) {
+		this.destination.X += directionX;
+		this.destination.Y += directionY;
+		
+		return this;
 	}
 	
 	public Resources resource = null;
