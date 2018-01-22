@@ -203,6 +203,10 @@ public class CanvasL extends ViewBase {
 		@Override
 		public int run(Object lParam, Object wParam) {
 			// TODO Auto-generated method stub
+			Roles role = (Roles)lParam;
+			int oldbase = role.base;
+			role.base = Animation_Base.Still;
+			role.selectAnimation(role.base + role.direction);
 			return 0;
 		}
 		
@@ -248,11 +252,11 @@ public class CanvasL extends ViewBase {
 		
 		canvas.drawBitmap(image, trunc, desti, mPaint);
 		
-		mPaint.setStyle(Style.STROKE);
+		//mPaint.setStyle(Style.STROKE);
 		//mPaint.setColor(Color.GREEN);
 		//canvas.drawRect(trunc, mPaint);
-		mPaint.setColor(Color.RED);
-		canvas.drawRect(desti, mPaint);
+		//mPaint.setColor(Color.RED);
+		//canvas.drawRect(desti, mPaint);
 	}
 	
 }
