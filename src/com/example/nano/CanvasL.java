@@ -59,7 +59,7 @@ public class CanvasL extends ViewBase {
 		Loading.loadMap(resm, world);
 		
 
-		player = Loading.loadRole(resm, 0.5f);
+		player = Loading.loadRole(resm, 0.75f);
 		player.moveRole(200,  100);
 		world.addRole(player, Role_Type.Player);
 //		
@@ -77,7 +77,7 @@ public class CanvasL extends ViewBase {
 //		role.moveRole(400,  200);
 //		world.addRole(role, Role_Type.Normal);
 		
-		Loading.loadScene(resm, world);
+		Loading.loadScene(resm, world, 1.5f);
 		
 	}
 	private Canvas canvas = null;

@@ -579,11 +579,11 @@ public class Loading {
 			tprole = temp.link;
 		}
 	}
-	public static void loadScene(ResourceManager resourceManager, World world) {
-		loadScene(resourceManager, world, null);
+	public static void loadScene(ResourceManager resourceManager, World world, float scale) {
+		loadScene(resourceManager, world, scale,  null);
 	}
 	
-	public static void loadScene(ResourceManager resourceManager, World world, String name) {
+	public static void loadScene(ResourceManager resourceManager, World world, float scale, String name) {
 		if (null ==  resourceManager) {
 			return;
 		}
@@ -607,7 +607,7 @@ public class Loading {
 		     while((data = buffreader.readLine()) != null) {
 		    	 bufferString += data + "\r\n";
 		     }
-	    	 createScene(resourceManager, world, bufferString);
+	    	 createScene(resourceManager, world, bufferString, scale);
         } catch(Exception e) {
         	
         } finally{
@@ -623,7 +623,7 @@ public class Loading {
 	}
 	
 	public static HashMap<String, String> g_roles = new HashMap<String, String>();
-	public static void createScene(ResourceManager resm, World world, String sceneString) {
+	public static void createScene(ResourceManager resm, World world, String sceneString, float _scale) {
 		if (null == resm) {
 			return;
 		}
@@ -661,6 +661,7 @@ public class Loading {
 				{
 					scale = 1;
 				}
+				scale *= _scale;
 				data = g_roles.get(indexString[0]);
 				if (null == data || data.equals(""))
 				{
