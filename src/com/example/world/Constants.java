@@ -39,13 +39,13 @@ public class Constants {
 	public static class Animation_Direction {
 		public static int Undefined = 0;
 		public static int Left = 1;
-		public static int Left_Up = 3;
+		public static int Left_Up = 2;
 		public static int Up = 3;
-		public static int Right_Up = 3;
+		public static int Right_Up = 4;
 		public static int Right = 5;
-		public static int Right_Down = 7;
+		public static int Right_Down = 6;
 		public static int Down = 7;
-		public static int Left_Down = 7;
+		public static int Left_Down = 8;
 	}
 	
 	public static class Role_Link {

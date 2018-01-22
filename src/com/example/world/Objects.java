@@ -45,7 +45,8 @@ public class Objects extends LinkList.Element<Objects> {
 		try {
 			if (1 == this.reverse){
 				canvas.drawBitmap(this.resource.image_r,
-						(float)this.resource.image_r.getWidth() - this.truncation.X, this.truncation.Y,
+						(float)this.resource.image_r.getWidth() - this.truncation.X - this.truncation.Width,
+						this.truncation.Y,
 						this.truncation.Width, this.truncation.Height,
 						this.destination.X + this.world.display.X,
 						this.destination.Y + this.world.display.Y,
